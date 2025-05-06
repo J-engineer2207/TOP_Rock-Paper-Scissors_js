@@ -1,9 +1,16 @@
-// Create a random function called getComputerChoice
-//Create an if statement with a logical operator
-//In the if statement return 'rock' 
-//Create an else if statement with a logical operator
-//In the else if statement return 'paper'
-//Create an else statement that returns 'scissors'
+const newDiv = document.createElement("div");
+newDiv.classList.add("results");
+document.body.appendChild(newDiv);
+
+const scoreBoard = document.createElement("div");
+scoreBoard.classList.add("scoreboard");
+scoreBoard.textContent = "Player: 0 | Computer: 0";
+document.body.appendChild(scoreBoard);
+
+const resultsDiv = document.querySelector(".results");
+const scoreboard = document.querySelector(".scoreboard");
+
+
 function getComputerChoice(value) {
     let x = Math.floor(Math.random() * value) + 1;
     if (x === 1) {
@@ -22,8 +29,7 @@ function getComputerChoice(value) {
 }
 
     
-//Create a function called getHumanChoice
-//In the function create a prompt method with default text
+
 function getHumanChoice() {
     let result = prompt("Choose your weapon");
     return result = result.toLowerCase();
@@ -31,80 +37,60 @@ function getHumanChoice() {
     
 }
 
-//Create a function called playRound which has two parameters
-//Make the functions humanChoice parameter case-insensitive
-//In the function produce a string that represents the round winner
-// Increment the computerScore or humanScore variable based on winner
 
-function playRound(humanChoice,computerChoice) {
-    let humanScore  = 0;
-    let computerScore = 0;
+let humanScore  = 0;
+let computerScore = 0;
+function playRound(humanChoice, computerChoice) {
+    let winner = "";
 
-    console.log(humanChoice);
-    console.log(computerChoice);
     if (humanChoice === "scissors" && computerChoice === "paper") {
-        console.log('You Win!, Scissors beats Paper');
-        return 'Human';
-        
-    } else if (humanChoice === 'paper' && computerChoice === 'rock') {
-        console.log('You Win!, Paper beats Rock');
-        return 'Human';
-    } else if (humanChoice === 'rock' && computerChoice === 'scissors') {
-        console.log('You Win!, Rock beats Scissors')
-        
-        return 'Human';
+        resultsDiv.textContent = 'You Win! Scissors beats Paper';
+        winner = "Human";
+    } else if (humanChoice === "paper" && computerChoice === "rock") {
+        resultsDiv.textContent = 'You Win! Paper beats Rock';
+        winner = "Human";
+    } else if (humanChoice === "rock" && computerChoice === "scissors") {
+        resultsDiv.textContent = 'You Win! Rock beats Scissors';
+        winner = "Human";
     } else if (humanChoice === computerChoice) {
-        console.log('Draw, Play again');
-        return 'Draw'
+        resultsDiv.textContent = 'Draw, Play again';
+        winner = "Draw";
     } else {
-        console.log('You Lose!, Try again');
-        return 'Computer';
+        resultsDiv.textContent = 'You Lose! Try again';
+        winner = "Computer";
+    }
+
+    // Increment the score AFTER checking winner
+    if (winner === "Human") {
+        humanScore++;
+    } else if (winner === "Computer") {
+        computerScore++;
+    }
+
+    // Update scoreboard
+    scoreboard.textContent = `Player: ${humanScore} | Computer: ${computerScore}`;
+
+    // Check for end of game
+    if (computerScore === 5 || humanScore === 5) {
+        const finalWinner =
+            humanScore === 5 ? "You win the game!" : "Computer wins the game!";
+        resultsDiv.textContent += ` ${finalWinner}`;
+
+        disableButtons(); // Optional: prevent further play
     }
 }
 
 
+const button_1 = document.querySelector(".rock")
+button_1.addEventListener("click", () => {
+    playRound("rock",getComputerChoice(3));
+})
+const button_2 = document.querySelector(".paper")
+button_2.addEventListener("click", () => {
+    playRound("paper",getComputerChoice(3));
+})
+const button_3 = document.querySelector(".scissors")
+button_3.addEventListener("click", () => {
+    playRound("scissors",getComputerChoice(3));
+})
 
-
-//Create a function called playGame
-//Initialize humanScore and ComputerScore to zero
-//Repeat 5 time:
-//get the computerChoice
-//get the humanChoice
-//play a round using the computerChoice & humanChoice
-//give score of round
-//After 5 rounds:
-//give total score of round
-//Determine winner and display message "You won, Congradulations"
-
-function playGame() {
-    let humanScore  = 0;
-    let computerScore = 0;
-    
-    for(i = 1; i<=5;i++){
-        console.log('--- Game Round:', i, '---');
-        const humanChoice = getHumanChoice();
-        const computerChoice = getComputerChoice(3);
-        const result = playRound(humanChoice,computerChoice);
-
-        if (result === 'Human') {
-            humanScore++;
-        } else if (result === 'Computer') {
-            computerScore++;
-        }
-
-        console.log('Score after round',i, 'Human:',humanScore, 'Computer:',computerScore);
-    }
-
-    console.log('--- FINAL RESULT ---');
-    if (humanScore > computerScore) {
-        console.log('You WON the game!!!', 'Human:',humanScore, 'Computer:',computerScore);
-
-    } else if (ComputerScore > HumanScore) {
-        console.log('Computer WON the game!!!', 'Human:',humanScore,'Computer:',computerScore);
-
-    } else {
-        console.log('It"s a tie,','Human:',humanScore,'Computer:',computerScore);
-    }
-}
-
-playGame();
